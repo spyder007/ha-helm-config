@@ -1,0 +1,13 @@
+bases:
+- environments.yaml
+---
+repositories:
+- name: library-charts
+  url: https://library-charts.k8s-at-home.com
+
+
+helmfiles:
+  - path: apps/*/helmfile.yaml
+    values:
+    - environments/{{ .Environment.Name }}/values.yaml
+    - imageTag: {{ .Values.imageTags.unifi_ipmanager }}

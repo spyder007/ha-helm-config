@@ -1,0 +1,69 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - main 
+  paths:
+    exclude:
+    - README.md
+    - scripts/*
+
+pr: none
+
+stages:
+- stage: stage_deploy_to_stage
+  displayName: Deploy To Stage Environment
+  jobs:
+  - job: job_deploy_stage
+    pool:
+      name: Default
+    steps:
+    - task: UsePythonVersion@0
+      displayName: Set Python Version to 3.x
+      inputs:
+        versionSpec: '3.x'
+    - script: |
+        cd scripts
+        pip3 install -r requirements.txt
+      displayName: Install Requirements for YAML editor
+    - task: PythonScript@0
+      displayName: Add Secrets from Pipeline
+      inputs:
+        scriptSource: 'filePath' # Options: filePath, inline
+        scriptPath: scripts/edit-value.py
+        arguments: --value unifi.password=$() $(Build.SourcesDirectory)/environments/stage/values.yaml
+        workingDirectory: scripts/
+    - template: steps-helmfile-sync.yml
+      parameters:
+        kubernetesConnectionName: "k8-nonprod"
+        environmentName: "stage"
+        namespace: "stage"
+        helmfileDirectory: ./
+- stage: stage_deploy_to_production
+  displayName: Deploy To Prod Environment
+  jobs:
+  - job: job_deploy_prod
+    pool:
+      name: Default
+    steps:
+    - task: UsePythonVersion@0
+      displayName: Set Python Version to 3.x
+      inputs:
+        versionSpec: '3.x'
+    - script: |
+        cd scripts
+        pip3 install -r requirements.txt
+      displayName: Install Requirements for YAML editor
+    - task: PythonScript@0
+      displayName: Add Secrets from Pipeline
+      inputs:
+        scriptSource: 'filePath' # Options: filePath, inline
+        scriptPath: scripts/edit-value.py
+        arguments: --value unifi.password=$() $(Build.SourcesDirectory)/environments/production/values.yaml
+        workingDirectory: scripts/
+    - template: steps-helmfile-sync.yml
+      parameters:
+        kubernetesConnectionName: "k8-prod"
+        environmentName: "production"
+        namespace: "production"
+        helmfileDirectory: ./

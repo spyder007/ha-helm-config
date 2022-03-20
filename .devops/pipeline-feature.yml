@@ -1,0 +1,41 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - feature/* 
+  paths:
+    exclude:
+    - README.md
+    - scripts/*
+
+pr: none
+
+stages:
+- stage: stage_deploy_to_test
+  displayName: Deploy To Test Environment
+  jobs:
+  - job: job_deploy_test
+    pool:
+      name: Default
+    steps:
+    - task: UsePythonVersion@0
+      displayName: Set Python Version to 3.x
+      inputs:
+        versionSpec: '3.x'
+    - script: |
+        cd scripts
+        pip3 install -r requirements.txt
+      displayName: Install Requirements for YAML editor
+    - task: PythonScript@0
+      displayName: Add Secrets from Pipeline
+      inputs:
+        scriptSource: 'filePath' # Options: filePath, inline
+        scriptPath: scripts/edit-value.py
+        arguments: --value unifi.password=$() $(Build.SourcesDirectory)/environments/test/values.yaml
+        workingDirectory: scripts/
+    - template: steps-helmfile-sync.yml
+      parameters:
+        kubernetesConnectionName: "k8-nonprod"
+        environmentName: "test"
+        namespace: "test"
+        helmfileDirectory: ./

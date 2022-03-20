@@ -1,0 +1,28 @@
+image:
+  tag: {{ .Values.imageTag }}
+
+secret:
+  UnifiControllerOptions__Password: "{{ .Values.unifi.password }}"
+
+env:
+  Identity__ApiName: "unifi.ipmanager"
+  UnifiControllerOptions__Url: "https://unifi.mattgerega.com"
+  UnifiControllerOptions__Username: "admin"
+
+envFrom: 
+  - configMapRef:
+      name: spydersoft-common-config
+
+ingress:
+  main:
+    enabled: true
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+    labels: 
+      ingressClassName: "nginx"
+    hosts:
+      - host: api.{{ .Values.environment_hostname }}
+        paths:
+          - path: /unifi/ipmanager(/|$)(.*)
+            pathType: Prefix
