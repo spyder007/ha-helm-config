@@ -1,4 +1,2 @@
 environment_hostname: mattgerega.net
 env_name: test
-unifi:
-  password: ''

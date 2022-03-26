@@ -8,19 +8,15 @@ strategy:
 imagePullSecrets: 
   - name: spydersoft-proget
 
-secret:
-  UnifiControllerOptions__Password: "<yourpassword>"
-
 env:
   Identity__ApiName: "unifi.ipmanager"
   UnifiControllerOptions__Url: "https://unifi.mattgerega.com"
-  UnifiControllerOptions__Username: "admin"
 
-## The "spydersoft-common-config" ConfigMap is a list of standard environmental variables ,
+## The "home-automation-common-config" ConfigMap is a list of standard environmental variables ,
 ##  that are unique to the namespace (test/stage/prod).
 envFrom: 
   - configMapRef:
-      name: spydersoft-common-config
+      name: home-automation-common-config
 
 service:
   main:

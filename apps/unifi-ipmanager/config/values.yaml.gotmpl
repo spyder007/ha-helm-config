@@ -1,17 +1,15 @@
 image:
   tag: {{ .Values.imageTag }}
 
-secret:
-  UnifiControllerOptions__Password: "{{ .Values.unifi.password }}"
-
 env:
   Identity__ApiName: "unifi.ipmanager"
   UnifiControllerOptions__Url: "https://unifi.mattgerega.com"
-  UnifiControllerOptions__Username: "admin"
 
 envFrom: 
   - configMapRef:
-      name: spydersoft-common-config
+      name: home-automation-common-config
+  - secretRef:
+      name: unifi-secrets
 
 ingress:
   main:

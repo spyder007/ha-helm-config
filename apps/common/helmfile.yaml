@@ -1,5 +1,5 @@
 releases:
-  - name: spydersoft-common-config
+  - name: home-automation-common-config
     chart: ./charts/{{`{{ .Release.Name }}`}}
     missingFileHandler: Warn
     values:
