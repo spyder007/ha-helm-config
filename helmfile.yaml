@@ -10,4 +10,5 @@ helmfiles:
   - path: apps/*/helmfile.yaml
     values:
     - environments/{{ .Environment.Name }}/values.yaml
-    - imageTag: {{ .Values.imageTags.unifi_ipmanager }}
+    - environments/{{ .Environment.Name }}/images.yaml
+      

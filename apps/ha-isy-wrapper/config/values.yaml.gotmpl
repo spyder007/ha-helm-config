@@ -1,15 +1,15 @@
 image:
-  tag: {{ .Values.imageTags.unifi_ipmanager }}
+  tag: {{ .Values.imageTags.ha_isy_wrapper }}
 
 env:
-  Identity__ApiName: "unifi.ipmanager"
-  UnifiControllerOptions__Url: "https://unifi.mattgerega.com"
+  Identity__ApiName: "ha.api.isywrapper"
+  IsyOptions__HomeAutomationUrl: "http://automation.gerega.net"
 
 envFrom: 
   - configMapRef:
       name: home-automation-common-config
   - secretRef:
-      name: unifi-secrets
+      name: isy-secrets
 
 ingress:
   main:
@@ -22,5 +22,5 @@ ingress:
     hosts:
       - host: api.{{ .Values.environment_hostname }}
         paths:
-          - path: /unifi/ipmanager(/|$)(.*)
+          - path: /ha/isywrapper(/|$)(.*)
             pathType: Prefix
