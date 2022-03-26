@@ -26,9 +26,8 @@ trigger:
 
 pr: none
 
-extends:
+stages:
   ${{ if contains(variables['Build.SourceBranch'], 'main') }}:
-    stages:
     - template: stages/stages-generate-commit-manifests/v1.yml@templates
       parameters:
         kubernetesConnectionName: "k8-nonprod"
@@ -61,13 +60,13 @@ extends:
 
 
   ${{ if not(contains(variables['Build.SourceBranch'], 'main')) }}:
-    template: stages/stages-generate-commit-manifests/v1.yml@templates
-    parameters:
-      kubernetesConnectionName: "k8-nonprod"
-      environmentName: "test"
-      namespace: "test"
-      helmfileDirectory: ./
-      argoRepoName: ops_nonprod_cluster
-      argoBaseDir: apps/home-automation
+    - template: stages/stages-generate-commit-manifests/v1.yml@templates
+      parameters:
+        kubernetesConnectionName: "k8-nonprod"
+        environmentName: "test"
+        namespace: "test"
+        helmfileDirectory: ./
+        argoRepoName: ops_nonprod_cluster
+        argoBaseDir: apps/home-automation
 
 
