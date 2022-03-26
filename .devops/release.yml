@@ -25,6 +25,6 @@ stages:
           
           cp $(Build.SourcesDirectory)/environments/stage/images.yaml $(Build.SourcesDirectory)/environments/production/images.yaml -f
           git add --all
-          git commit -m "Promote Stage To Production"
+          git commit -m "Promote Stage To Production [skip_ci]"
           git push origin main
         displayName: Copy Stage Images to Production
