@@ -1,5 +1,5 @@
 apiVersion: v2
-name: ha-api-isywrapper
+name: ha-isy-wrapper
 description: Home Automation API - ISY Wrapper
 
 # A chart can be either an 'application' or a 'library' chart.
