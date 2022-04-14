@@ -1,8 +1,8 @@
 commonConfigMap:
   Identity__AuthorityUrl : "https://auth.{{ .Values.environment_hostname }}"
   Logging__LogLevel__Default: "Warning"
-  Serilog__WriteTo__Elastic__Args__indexFormat: "log-{{ lower .Values.env_name }}-{0:yyyy.MM}"
-  Serilog__WriteTo__Elastic__Args__nodeUris: "http://elastic.mattgerega.net/"
+  Serilog__WriteTo__ElasticSink__Args__indexFormat: "log-{{ lower .Values.env_name }}-{0:yyyy.MM}"
+  Serilog__WriteTo__ElasticSink__Args__nodeUris: "http://elastic.mattgerega.net/"
   AllowedOrigins__0: "https://*.{{ .Values.environment_hostname }}"
   {{ if eq .Values.env_name "test"  }}
   AllowedOrigins__1: "http://localhost:3000"
