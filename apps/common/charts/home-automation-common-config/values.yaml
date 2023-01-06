@@ -1,5 +1,3 @@
 commonConfigMap:
   Identity__AuthorityUrl : ""
   Logging__LogLevel__Default: "Warning"
-  Serilog__WriteTo__ElasticSink__Args__indexFormat: ""
-  Serilog__WriteTo__ElasticSink__Args__nodeUris: ""
