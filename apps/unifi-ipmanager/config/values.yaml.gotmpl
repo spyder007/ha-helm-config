@@ -13,6 +13,13 @@ envFrom:
   - secretRef:
       name: unifi-secrets
 
+redis:
+  {{ if eq .Environment.Name "production"  }}
+  environment: "production"
+  {{ else }}
+  environment: "nonproduction"
+  {{ end }}
+
 ingress:
   main:
     enabled: true
