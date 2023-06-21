@@ -18,11 +18,13 @@ if ($shortBranchName -match 'feature/(.*)') {
 
     if ($branchExists) {
         Write-Host "Using existing branch -> $helmBranch"
-        git checkout "$helmBranch"
+        Invoke-Expression "git fetch"
+        Invoke-Expression "git checkout $helmBranch"
+        Invoke-Expression "git reset --hard"
     }
     else {
         Write-Host "Creating new local branch -> $helmBranch"
-        git checkout -b "$helmBranch"
+        Invoke-Expression "git checkout $helmBranch"
 
         Copy-Item ./environments/stage/images.yaml ./environments/test/images.yaml -Force
     }
@@ -32,6 +34,7 @@ else {
     $helmBranch = "main"
     Write-Host "Processing $shortBranchName -> Modifying Helm Branch $helmBranch"
     Invoke-Expression "git checkout $helmBranch"
+    Invoke-Expression "git reset --hard"
 }
 $imageFile = "./environments/$environment/images.yaml"
 

@@ -1,3 +1,4 @@
 imageTags:
   ha_isy_wrapper: 1.0.12
-  unifi_ipmanager: 1.1.27-ip-cooldown.2
+  unifi_client: 0.1.16-client-hosting.7
+  unifi_ipmanager: 1.1.28-client-hosting.3

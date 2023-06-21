@@ -1,7 +1,7 @@
 commonConfigMap:
   Identity__AuthorityUrl : "https://auth.{{ .Values.environment_hostname }}"
   Logging__LogLevel__Default: "Warning"
-  AllowedOrigins__0: "https://*.{{ .Values.environment_hostname }}"
+  AllowedOrigins__0: "https://uni.{{ .Values.environment_hostname }}"
   {{ if eq .Values.env_name "test"  }}
   AllowedOrigins__1: "http://localhost:3000"
   {{ end }}

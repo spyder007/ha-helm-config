@@ -4,6 +4,8 @@ bases:
 repositories:
 - name: library-charts
   url: https://library-charts.k8s-at-home.com
+- name: common
+  url: https://bjw-s.github.io/helm-charts
 
 
 helmfiles:
