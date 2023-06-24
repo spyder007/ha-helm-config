@@ -24,7 +24,7 @@ if ($shortBranchName -match 'feature/(.*)') {
     }
     else {
         Write-Host "Creating new local branch -> $helmBranch"
-        Invoke-Expression "git checkout $helmBranch"
+        Invoke-Expression "git checkout -b $helmBranch"
 
         Copy-Item ./environments/stage/images.yaml ./environments/test/images.yaml -Force
     }
