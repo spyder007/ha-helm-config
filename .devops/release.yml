@@ -22,7 +22,7 @@ stages:
           git config --global user.name "CI/CD User"
           cd $(Build.SourcesDirectory)
           git checkout main
-          git pull
+          git pull --rebase
           
           cp $(Build.SourcesDirectory)/environments/stage/images.yaml $(Build.SourcesDirectory)/environments/production/images.yaml -f
           git add --all
