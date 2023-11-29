@@ -38,7 +38,7 @@ else {
 }
 $imageFile = "./environments/$environment/images.yaml"
 
-Invoke-Expression "git pull"
+Invoke-Expression "git pull --rebase"
 
 Write-Host "Replacing tags in $imageFile"
 $imagePath = (Resolve-Path $imageFile).Path
