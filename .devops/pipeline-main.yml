@@ -1,17 +1,17 @@
 resources:
   repositories:
     - repository: ops_nonprod_cluster
-      type: BitBucket
-      endpoint: Bitbucket - spydersoft
-      name: spydersoftteam/ops-nonprod-cluster
+      type: github
+      endpoint: spydersoft-gh
+      name: spydersoft-consulting/ops-nonprod-cluster
     - repository: ops_prod_cluster
-      type: BitBucket
-      endpoint: Bitbucket - spydersoft
-      name: spydersoftteam/ops-prod-cluster
+      type: github
+      endpoint: spydersoft-gh
+      name: spydersoft-consulting/ops-prod-cluster
     - repository: templates
-      type: BitBucket
-      endpoint: "Bitbucket - spydersoft"
-      name: spydersoftteam/azure-devops-templates
+      type: github
+      endpoint: spydersoft-gh
+      name: spydersoft-consulting/azure-devops-templates
 
 trigger:
   batch: true
