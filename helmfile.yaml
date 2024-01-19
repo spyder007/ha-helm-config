@@ -9,7 +9,15 @@ repositories:
 
 
 helmfiles:
-  - path: apps/*/helmfile.yaml
+  - path: apps/common/helmfile.yaml
+    values:
+    - environments/{{ .Environment.Name }}/values.yaml
+    - environments/{{ .Environment.Name }}/images.yaml
+  - path: apps/unifi-client/helmfile.yaml
+    values:
+    - environments/{{ .Environment.Name }}/values.yaml
+    - environments/{{ .Environment.Name }}/images.yaml
+  - path: apps/unifi-ipmanager/helmfile.yaml
     values:
     - environments/{{ .Environment.Name }}/values.yaml
     - environments/{{ .Environment.Name }}/images.yaml
