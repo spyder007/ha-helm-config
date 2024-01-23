@@ -1,6 +1,7 @@
 releases:
   - name: unifi-client
     chart: ./charts/{{`{{ .Release.Name }}`}}
+    namespace: "{{`{{ .Environment.Name }}`}}"
     missingFileHandler: Warn
     values:
     - config/values.yaml.gotmpl

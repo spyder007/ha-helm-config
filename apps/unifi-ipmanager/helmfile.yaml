@@ -1,6 +1,7 @@
 releases:
   - name: unifi-ipmanager
     chart: ./charts/{{`{{ .Release.Name }}`}}
+    namespace: "{{`{{ .Environment.Name }}`}}"
     missingFileHandler: Warn
     values:
     - config/values.yaml.gotmpl
