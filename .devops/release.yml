@@ -1,18 +1,14 @@
 stages:
 - template: stages/stages-generate-commit-manifests/v1.yml@templates
   parameters:
-    kubernetesConnectionName: "k8-nonprod"
     environmentName: "stage"
-    namespace: "stage"
     helmfileDirectory: ./
     argoRepoName: ops_nonprod_cluster
     argoBaseDir: apps/home-automation
 
 - template: stages/stages-generate-commit-manifests/v1.yml@templates
   parameters:
-    kubernetesConnectionName: "k8-prod"
     environmentName: "production"
-    namespace: "production"
     helmfileDirectory: ./
     argoRepoName: ops_prod_cluster
     argoBaseDir: apps/home-automation
