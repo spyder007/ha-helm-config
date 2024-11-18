@@ -1,12 +1,12 @@
 image:
-  repository: proget.mattgerega.com/spydersoft/ha/unifi.ipmanager
+  repository: ghcr.io/spyder007/unifi-ipmanager
   pullPolicy: IfNotPresent
 
 strategy:
   type: Recreate
 
 imagePullSecrets: 
-  - name: spydersoft-proget
+  - name: cr-spydersoft-github
 
 env:
   Identity__ApiName: "unifi.ipmanager"
