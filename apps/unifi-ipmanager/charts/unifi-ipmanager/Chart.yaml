@@ -25,5 +25,5 @@ appVersion: "1.0.9"
 
 dependencies:
 - name: common
-  version: 4.2.0
-  repository: https://library-charts.k8s-at-home.com
+  version: 2.5.0
+  repository: https://bjw-s.github.io/helm-charts

@@ -1,12 +1,12 @@
 image:
-  repository: proget.mattgerega.com/spydersoft/ha/unifi.client
+  repository: ghcr.io/spyder007/unifi-client
   pullPolicy: IfNotPresent
 
 strategy:
   type: Recreate
 
 imagePullSecrets: 
-  - name: spydersoft-proget
+  - name: cr-spydersoft-github
 
 persistence:
   config-js:
