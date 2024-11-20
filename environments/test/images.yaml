@@ -1,3 +1,3 @@
 imageTags:
-  unifi_client: 0.1.19-package-updates.5
-  unifi_ipmanager: 1.1.34-package-updates.5
+  unifi_client: 0.1.19
+  unifi_ipmanager: 1.1.34-revert-nswag-changes.1
