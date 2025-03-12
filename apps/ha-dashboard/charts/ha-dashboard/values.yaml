@@ -13,7 +13,7 @@ controllers:
     containers:
       main:
         image:
-          repository: ghcr.io/spydersoft-consulting/techradar-frontend
+          repository: ghcr.io/spyder007/ha-frontend
           tag: latest
           pullPolicy: IfNotPresent
         probes:
