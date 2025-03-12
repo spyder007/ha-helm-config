@@ -1,5 +1,5 @@
 releases:
-  - name: ha-frontend
+  - name: ha-dashboard
     chart: ./charts/{{`{{ .Release.Name }}`}}
     namespace: "{{`{{ .Environment.Name }}`}}"
     missingFileHandler: Warn

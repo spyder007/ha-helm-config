@@ -1,0 +1,44 @@
+configMaps:
+  common:
+    enabled: true
+    data:
+      Telemetry__Trace__Otlp__Endpoint: "http://tfx-internal.gerega.net:32326"
+      Telemetry__Log__Otlp__Endpoint: "https://loki.mattgerega.net/otlp/v1/logs"
+      Telemetry__Metrics__Otlp__Endpoint: "https://mimir.mattgerega.net/otlp"
+  frontend:
+    enabled: true
+    data:
+      {{ if ne .Environment.Name "production" }}
+      Telemetry__ActivitySourceName: "HA.Frontend.{{ title .Values.env_name }}.Activity"
+      Telemetry__MeterName: "HA.Frontend.{{ title .Values.env_name }}.Meter"
+      Telemetry__ServiceName: "HA.Frontend.{{ title .Values.env_name }}"
+      {{ end }}
+
+controllers:
+  frontend:
+    containers:
+      main:
+        image:
+          tag: {{ .Values.imageTags.ha_frontend }}
+        envFrom:
+        - secretRef:
+            name: ha-dashboard-frontend
+        - configMapRef:
+            identifier: common
+        - configMapRef:
+            identifier: frontend
+
+ingress:
+  main:
+    enabled: true
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+    labels: 
+      ingressClassName: "nginx"
+    hosts:
+      - host: dashboard.{{ .Values.environment_hostname }}
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              name: frontend
