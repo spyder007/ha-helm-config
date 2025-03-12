@@ -19,4 +19,8 @@ helmfiles:
     values:
     - environments/{{ .Environment.Name }}/values.yaml
     - environments/{{ .Environment.Name }}/images.yaml
+  - path: apps/ha-frontend/helmfile.yaml
+    values:
+    - environments/{{ .Environment.Name }}/values.yaml
+    - environments/{{ .Environment.Name }}/images.yaml
       
