@@ -19,7 +19,7 @@ controllers:
     containers:
       main:
         image:
-          tag: {{ .Values.imageTags.ha_frontend }}
+          tag: {{ .Values.imageTags.ha_dashboard_frontend }}
         envFrom:
         - secretRef:
             name: ha-dashboard-frontend
