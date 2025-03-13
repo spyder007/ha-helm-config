@@ -13,6 +13,7 @@ configMaps:
       Telemetry__MeterName: "HA.Frontend.{{ title .Values.env_name }}.Meter"
       Telemetry__ServiceName: "HA.Frontend.{{ title .Values.env_name }}"
       {{ end }}
+      Bff__ReverseProxy__Clusters__unifiIpManager__Destinations__api__Address: "unifi-ipmanager-main.{{ .Values.env_name }}"
 
 controllers:
   frontend:
