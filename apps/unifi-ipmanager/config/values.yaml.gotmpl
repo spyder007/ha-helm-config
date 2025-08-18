@@ -43,6 +43,6 @@ ingress:
       - host: api.{{ .Values.environment_hostname }}
         paths:
           - path: /unifi/ipmanager(/|$)(.*)
-            pathType: Prefix
+            pathType: Exact
             service:
               name: main
