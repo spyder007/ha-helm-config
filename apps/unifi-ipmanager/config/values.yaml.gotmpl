@@ -4,7 +4,7 @@ configMaps:
     data:
       Identity__ApiName: "unifi.ipmanager"
       UnifiControllerOptions__Url: "https://unifi.gerega.net"
-      UnifiOptions__DnsZone: "gerega.net"
+      UnifiControllerOptions__DnsZone: "gerega.net"
       {{ if ne .Environment.Name "production" }}
       Telemetry__ActivitySourceName: "Unifi.IpManager.{{ title .Values.env_name }}.Activity"
       Telemetry__MeterName: "Unifi.IpManager.{{ title .Values.env_name }}.Meter"
