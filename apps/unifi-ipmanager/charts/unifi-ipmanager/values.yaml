@@ -56,7 +56,7 @@ ingress:
       - host: test.mattgerega.net
         paths:
           - path: /unifi/ipmanager(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             service:
               name: main
               

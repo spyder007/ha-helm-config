@@ -5,3 +5,4 @@ stages:
     helmfileDirectory: ./
     argoRepoName: ops_nonprod_cluster
     argoBaseDir: apps/home-automation
+    helmfileVersion: "1.1.5"

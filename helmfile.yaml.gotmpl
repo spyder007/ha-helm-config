@@ -3,19 +3,19 @@ bases:
 ---
 repositories:
 - name: common
-  url: https://bjw-s.github.io/helm-charts
+  url: https://bjw-s-labs.github.io/helm-charts
 
 
 helmfiles:
-  - path: apps/common/helmfile.yaml
+  - path: apps/common/helmfile.yaml.gotmpl
     values:
     - environments/{{ .Environment.Name }}/values.yaml
     - environments/{{ .Environment.Name }}/images.yaml
-  - path: apps/unifi-client/helmfile.yaml
+  - path: apps/unifi-client/helmfile.yaml.gotmpl
     values:
     - environments/{{ .Environment.Name }}/values.yaml
     - environments/{{ .Environment.Name }}/images.yaml
-  - path: apps/unifi-ipmanager/helmfile.yaml
+  - path: apps/unifi-ipmanager/helmfile.yaml.gotmpl
     values:
     - environments/{{ .Environment.Name }}/values.yaml
     - environments/{{ .Environment.Name }}/images.yaml

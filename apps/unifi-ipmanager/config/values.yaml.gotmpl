@@ -4,8 +4,7 @@ configMaps:
     data:
       Identity__ApiName: "unifi.ipmanager"
       UnifiControllerOptions__Url: "https://unifi.gerega.net"
-      DnsService__Url: "http://dc2203.ad.mattgerega.net:5000"
-      DnsService__DefaultZone: "gerega.net"
+      UnifiControllerOptions__DnsZone: "gerega.net"
       {{ if ne .Environment.Name "production" }}
       Telemetry__ActivitySourceName: "Unifi.IpManager.{{ title .Values.env_name }}.Activity"
       Telemetry__MeterName: "Unifi.IpManager.{{ title .Values.env_name }}.Meter"
@@ -43,6 +42,6 @@ ingress:
       - host: api.{{ .Values.environment_hostname }}
         paths:
           - path: /unifi/ipmanager(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             service:
               name: main
