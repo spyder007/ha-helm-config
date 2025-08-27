@@ -2,9 +2,6 @@ commonConfigMap:
   Telemetry__Trace__Otlp__Endpoint: "{{ .Values.alloy_otlp_collector}}"
   Telemetry__Log__Otlp__Endpoint: "{{ .Values.alloy_otlp_collector}}"
   Telemetry__Metrics__Otlp__Endpoint: "{{ .Values.alloy_otlp_collector}}"
-  Telemetry__Trace__Otlp__Headers__X-Scope-OrgID: {{ .Values.org_id }}
-  Telemetry__Log__Otlp__Headers__X-Scope-OrgID: {{ .Values.org_id }}
-  Telemetry__Metrics__Otlp__Headers__X-Scope-OrgID: {{ .Values.org_id }}
   Identity__Authority : "https://auth.{{ .Values.environment_hostname }}"
   Logging__LogLevel__Default: "Warning"
   AllowedOrigins__0: "https://uni.{{ .Values.environment_hostname }}"
