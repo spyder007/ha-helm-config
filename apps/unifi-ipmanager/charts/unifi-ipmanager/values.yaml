@@ -5,6 +5,9 @@ defaultPodOptions:
 controllers:
   main:
     enabled: true
+    revisionHistoryLimit: 3
+    type: deployment
+    replicas: 1
     containers:
       main:
         image:
@@ -36,9 +39,8 @@ controllers:
  
 service:
   main:
-    enabled: true
     controller: main
-    nameOverride: main
+    enabled: true
     primary: true
     type: ClusterIP
     ports:
@@ -49,6 +51,7 @@ service:
 route:
   main:
     enabled: true
+    kind: HTTPRoute
     parentRefs:
       - name: main
         namespace: envoy-gateway-system
@@ -70,5 +73,6 @@ route:
         backendRefs:
           - identifier: main
             port: http
+        
               
 env_name: dev

@@ -1,5 +1,9 @@
-image:
-  tag: {{ .Values.imageTags.unifi_client }}
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: {{ .Values.imageTags.unifi_client }}
 
 configMaps:
   config-js:

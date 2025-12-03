@@ -1,23 +1,30 @@
-image:
-  repository: ghcr.io/spyder007/unifi-client
-  pullPolicy: IfNotPresent
+defaultPodOptions:
+  imagePullSecrets:
+    - name: cr-spydersoft-github
 
-strategy:
-  type: Recreate
-
-imagePullSecrets: 
-  - name: cr-spydersoft-github
+controllers:
+  main:
+    enabled: true
+    type: deployment
+    strategy: Recreate
+    containers:
+      main:
+        image:
+          repository: ghcr.io/spyder007/unifi-client
+          pullPolicy: IfNotPresent
 
 persistence:
   config-js:
     enabled: true
     type: configMap
     name: unifi-client-config-js
-    mountPath: /usr/share/nginx/html/config.js
-    subPath: config.js
+    globalMounts:
+      - path: /usr/share/nginx/html/config.js
+        subPath: config.js
 
 service:
   main:
+    controller: main
     ports:
       http:
         port: 80

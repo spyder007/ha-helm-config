@@ -17,13 +17,13 @@ controllers:
       main:
         image:
           tag: {{ .Values.imageTags.unifi_ipmanager }}
-        envFrom: 
-        - configMapRef:
-            name: home-automation-common-config
-        - configMapRef:
-            identifier: ipmanager
-        - secretRef:
-            name: unifi-secrets
+        envFrom:
+          - configMapRef:
+              name: home-automation-common-config
+          - configMapRef:
+              identifier: ipmanager
+          - secretRef:
+              name: unifi-secrets
 
 redis:
   {{ if eq .Environment.Name "production"  }}
@@ -32,7 +32,3 @@ redis:
   environment: "nonproduction"
   {{ end }}
 
-route:
-  main:
-    hostnames:
-      - api.{{ .Values.environment_hostname }}
