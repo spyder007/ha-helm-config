@@ -47,4 +47,4 @@ route:
               value: /
         backendRefs:
           - identifier: main
-            port: 8080
+            port: 80
