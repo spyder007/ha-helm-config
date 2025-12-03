@@ -1,15 +1,21 @@
-image:
-  repository: ghcr.io/spyder007/ha-frontend
-  pullPolicy: IfNotPresent
+defaultPodOptions:
+  imagePullSecrets:
+    - name: cr-spydersoft-github
 
-strategy:
-  type: Recreate
-
-imagePullSecrets: 
-  - name: cr-spydersoft-github
+controllers:
+  main:
+    enabled: true
+    type: deployment
+    strategy: Recreate
+    containers:
+      main:
+        image:
+          repository: ghcr.io/spyder007/ha-frontend
+          pullPolicy: IfNotPresent
 
 service:
   main:
+    controller: main
     ports:
       http:
         port: 80

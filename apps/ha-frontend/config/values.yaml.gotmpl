@@ -1,5 +1,9 @@
-image:
-  tag: {{ .Values.imageTags.ha_frontend }}
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: {{ .Values.imageTags.ha_frontend }}
 
 route:
   main:
