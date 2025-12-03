@@ -32,16 +32,7 @@ redis:
   environment: "nonproduction"
   {{ end }}
 
-ingress:
+route:
   main:
-    enabled: true
-    className: nginx
-    annotations: 
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-    hosts:
-      - host: api.{{ .Values.environment_hostname }}
-        paths:
-          - path: /unifi/ipmanager(/|$)(.*)
-            pathType: ImplementationSpecific
-            service:
-              name: main
+    hostnames:
+      - api.{{ .Values.environment_hostname }}
