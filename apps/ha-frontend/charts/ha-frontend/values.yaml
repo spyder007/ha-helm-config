@@ -32,4 +32,4 @@ route:
               value: /
         backendRefs:
           - identifier: main
-            port: http
+            port: 8080

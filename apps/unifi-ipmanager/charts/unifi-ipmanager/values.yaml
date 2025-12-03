@@ -72,7 +72,7 @@ route:
                 replacePrefixMatch: /
         backendRefs:
           - identifier: main
-            port: http
+            port: 8080
         
               
 env_name: dev
