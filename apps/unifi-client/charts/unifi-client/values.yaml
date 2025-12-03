@@ -23,15 +23,21 @@ service:
         port: 80
         targetPort: 8080
 
-ingress:
+route:
   main:
     enabled: true
-    annotations: 
-      kubernetes.io/ingress.class: nginx
-    labels: 
-      ingressClassName: "nginx"
-    hosts:
-      - host: test.mattgerega.net
-        paths:
-          - path: /
-            pathType: Prefix
+    parentRefs:
+      - name: main
+        namespace: envoy-gateway-system
+        group: gateway.networking.k8s.io
+        kind: Gateway
+    hostnames:
+      - test.mattgerega.net
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+        backendRefs:
+          - identifier: main
+            port: http
