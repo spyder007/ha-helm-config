@@ -10,9 +10,22 @@ configMaps:
       Telemetry__MeterName: "Unifi.IpManager.{{ title .Values.env_name }}.Meter"
       Telemetry__ServiceName: "Unifi.IpManager.{{ title .Values.env_name }}"
       {{ end }}
+  config-js:
+    enabled: true
+    data:
+      config.js: |
+        window.unifi_client_api = {
+          backend: 'https://api.{{ .Values.environment_hostname }}/unifi/ipmanager',
+        };
+
+        window.unifi_client_auth = {
+          authority: 'https://auth.{{ .Values.environment_hostname }}/',
+          clientId: 'unifiwebclient',
+          redirectUri: 'https://uni.{{ .Values.environment_hostname }}',
+        };
 
 controllers:
-  main:
+  api:
     containers:
       main:
         image:
@@ -24,16 +37,16 @@ controllers:
               identifier: ipmanager
           - secretRef:
               name: unifi-secrets
+  frontend:
+    containers:
+      main:
+        image:
+          tag: {{ .Values.imageTags.unifi_frontend }}
 
 route:
-  main:
+  api:
     hostnames:
       - api.{{ .Values.environment_hostname }}
-
-redis:
-  {{ if eq .Environment.Name "production"  }}
-  environment: "production"
-  {{ else }}
-  environment: "nonproduction"
-  {{ end }}
-
+  frontend:
+    hostnames:
+      - uni.{{ .Values.environment_hostname }}

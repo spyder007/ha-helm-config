@@ -1,0 +1,125 @@
+stages:
+# Every automated build (beta or release) writes to environments/test/images.yaml
+# via process-cicd.ps1, which commits with a "BETA - ..." or "RELEASE - ..."
+# message prefix depending on which branch (main vs. tag) produced it. This
+# checks that commit message directly rather than grepping images.yaml
+# content: ha-helm-config hosts multiple independently-versioned OCI-chart
+# apps (unifi_ipmanager_chart_version, and any other app added later)
+# sharing one flat imageTags map, so a whole-file content scan can't
+# correctly tell "is THIS build a release" once more than one app is in
+# play -- one app's already-released, permanently-unlabeled chart_version
+# key would make a content scan report isRelease=true forever, even for
+# another app's beta build. The triggering commit's own message is
+# inherently scoped to exactly the one build that caused this run.
+#
+# A third case exists alongside BETA/RELEASE: a human pushing directly to
+# main with a hand-authored commit (e.g. flipping a helmfile.yaml.gotmpl
+# release-gate flag, not an image-tag bump). Production should still deploy
+# manifests for that case; only image-tag promotion should be gated on an
+# actual RELEASE commit. BETA builds skip production entirely (unwanted
+# approval-request spam for routine main-branch churn); RELEASE and manual
+# builds both deploy manifests to production, but only RELEASE also
+# promotes images.yaml -- a manual commit's production render reflects
+# whatever images.yaml already contains, unchanged.
+- stage: detect_version
+  displayName: Detect Release vs Beta
+  jobs:
+    - job: detect
+      pool:
+        name: Default
+      steps:
+        - script: |
+            commitMessage="$(Build.SourceVersionMessage)"
+            if [[ "$commitMessage" == RELEASE* ]]; then
+              buildKind=release
+              echo "Release build detected ($commitMessage) -- production will be offered once test deploys, images.yaml will be promoted"
+            elif [[ "$commitMessage" == BETA* ]]; then
+              buildKind=beta
+              echo "Beta/prerelease build detected ($commitMessage) -- production will be skipped entirely"
+            else
+              buildKind=manual
+              echo "Manual commit detected ($commitMessage) -- production will be offered once test deploys, images.yaml will NOT be promoted"
+            fi
+            echo "##vso[task.setvariable variable=buildKind;isOutput=true]$buildKind"
+          name: DetectVersion
+
+- template: stages/stages-generate-commit-manifests/v1.yml@templates
+  parameters:
+    environmentName: "test"
+    helmfileDirectory: ./
+    argoRepoName: ops_nonprod_cluster
+    argoBaseDir: apps/home-automation
+    helmfileVersion: "1.1.5"
+    pregenerateSteps:
+      - task: Docker@2
+        displayName: Login to Container Registry (for OCI chart pulls)
+        inputs:
+          command: login
+          containerRegistry: github-spydersoft-docker
+
+- template: stages/stages-generate-commit-manifests/v1.yml@templates
+  parameters:
+    environmentName: "production"
+    helmfileDirectory: ./
+    argoRepoName: ops_prod_cluster
+    argoBaseDir: apps/home-automation
+    helmfileVersion: "1.1.5"
+    dependsOn:
+      - generate_commit_manifest_test
+      - detect_version
+    # dependencies (not stageDependencies -- that context is only valid
+    # inside a job's condition, not a stage's own condition) referencing
+    # detect_version's job/step output.
+    condition: and(succeeded(), ne(dependencies.detect_version.outputs['detect.DetectVersion.buildKind'], 'beta'))
+    pregenerateSteps:
+      - task: Docker@2
+        displayName: Login to Container Registry (for OCI chart pulls)
+        inputs:
+          command: login
+          containerRegistry: github-spydersoft-docker
+      - script: |
+          # Only a release build should advance the image-promotion train --
+          # a manual (config-only) commit deploys production as-is.
+          commitMessage="$(Build.SourceVersionMessage)"
+          if [[ "$commitMessage" != RELEASE* ]]; then
+            echo "Not a release build ($commitMessage) -- skipping image promotion"
+            exit 0
+          fi
+
+          git config --global user.email "gerega@gmail.com"
+          git config --global user.name "CI/CD User"
+          cd $(Build.SourcesDirectory)
+          # This job's workspace is reused across runs on self-hosted agents
+          # (no clean checkout between runs). A prior run's leftover
+          # rebase-merge state (from a conflict or a rejected push) blocks
+          # every subsequent run's rebase with "there is already a
+          # rebase-merge directory". fetch+hard-reset is self-healing
+          # against any stuck local state.
+          git rebase --abort 2>/dev/null || true
+          git fetch origin
+          git checkout main
+          git reset --hard origin/main
+
+          # Promote only the keys THIS release actually changed in
+          # test/images.yaml -- not the whole file. A whole-file cp would
+          # drag other apps' unrelated in-flight betas into production.
+          # $(Build.SourceVersion) is this whole pipeline run's fixed
+          # triggering commit -- diffing it against its own parent gives
+          # exactly the key set this build's process-cicd.ps1 run touched,
+          # stable regardless of how many commits (including this
+          # promotion's own) land afterward.
+          CHANGED_KEYS=$(git diff $(Build.SourceVersion)~1 $(Build.SourceVersion) -- environments/test/images.yaml | grep -E '^\+  [a-zA-Z0-9_]+:' | sed -E 's/^\+  ([a-zA-Z0-9_]+):.*/\1/' | sort -u)
+          echo "Promoting changed keys: $CHANGED_KEYS"
+          for KEY in $CHANGED_KEYS; do
+            VALUE=$(grep -E "^  ${KEY}:" environments/test/images.yaml | sed -E "s/^  ${KEY}: *//")
+            if grep -qE "^  ${KEY}:" environments/production/images.yaml; then
+              sed -i -E "s|^  ${KEY}:.*|  ${KEY}: ${VALUE}|" environments/production/images.yaml
+            else
+              echo "  ${KEY}: ${VALUE}" >> environments/production/images.yaml
+            fi
+          done
+
+          git add environments/production/images.yaml
+          git commit -m "Promote Test To Production [skip ci]"
+          git push origin main
+        displayName: Copy Test Images to Production

@@ -6,7 +6,8 @@ controllers:
   main:
     enabled: true
     type: deployment
-    strategy: Recreate
+    strategy: RollingUpdate
+    revisionHistoryLimit: 1
     containers:
       main:
         image:

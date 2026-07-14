@@ -1,6 +1,18 @@
 releases:
-  - name: unifi-ipmanager
+  - name: unifi-ipmanager-data
     chart: ./charts/{{`{{ .Release.Name }}`}}
+    namespace: "{{`{{ .Environment.Name }}`}}"
+    missingFileHandler: Warn
+    values:
+    - config/data-values.yaml.gotmpl
+    - config/{{`{{ .Environment.Name }}`}}.yaml
+
+  # The API and UI, published as one combined OCI chart from the merged
+  # unifi-ipmanager repo (api + frontend controllers) and versioned
+  # alongside its image tags.
+  - name: unifi-ipmanager-app
+    chart: oci://ghcr.io/spydersoft-consulting/charts/unifi-ipmanager
+    version: "{{`{{ .Values.imageTags.unifi_ipmanager_chart_version }}`}}"
     namespace: "{{`{{ .Environment.Name }}`}}"
     missingFileHandler: Warn
     values:
