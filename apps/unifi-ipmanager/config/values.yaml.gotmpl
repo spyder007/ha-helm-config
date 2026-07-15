@@ -37,11 +37,17 @@ controllers:
               identifier: ipmanager
           - secretRef:
               name: unifi-secrets
+        resources:
+          requests:
+            cpu: 5m
   frontend:
     containers:
       main:
         image:
           tag: {{ .Values.imageTags.unifi_frontend }}
+        resources:
+          requests:
+            cpu: 5m
 
 route:
   api:
