@@ -1,3 +1,2 @@
 commonConfigMap:
   Identity__AuthorityUrl : ""
-  Logging__LogLevel__Default: "Warning"
