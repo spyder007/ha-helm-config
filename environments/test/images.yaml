@@ -1,5 +1,5 @@
 imageTags:
   ha_frontend: 0.0.0
-  unifi_frontend: 1.1.2-beta.3
-  unifi_ipmanager: 1.1.2-beta.3
-  unifi_ipmanager_chart_version: 1.1.2-beta.3
+  unifi_frontend: 1.1.2-beta.4
+  unifi_ipmanager: 1.1.2-beta.4
+  unifi_ipmanager_chart_version: 1.1.2-beta.4
