@@ -3,6 +3,7 @@ configMaps:
     enabled: true
     data:
       Identity__ApiName: "unifi.ipmanager"
+      Serilog__MinimumLevel__Default: "Warning"
       UnifiControllerOptions__Url: "https://unifi.gerega.net"
       UnifiControllerOptions__DnsZone: "gerega.net"
       {{ if ne .Environment.Name "production" }}
