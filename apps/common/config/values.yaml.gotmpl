@@ -2,6 +2,7 @@ commonConfigMap:
   Telemetry__Trace__Otlp__Endpoint: "{{ .Values.alloy_otlp_endpoint }}"
   Telemetry__Log__Otlp__Endpoint: "{{ .Values.alloy_otlp_endpoint }}"
   Telemetry__Metrics__Otlp__Endpoint: "{{ .Values.alloy_otlp_endpoint }}"
+  Serilog__MinimumLevel__Default: "Warning"
   Identity__Authority : "https://auth.{{ .Values.environment_hostname }}"
   AllowedOrigins__0: "https://uni.{{ .Values.environment_hostname }}"
   {{ if eq .Values.env_name "test"  }}
